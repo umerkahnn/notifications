@@ -1,0 +1,73 @@
+initialisation:
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+//head project. icon drawable mein dalna hsain abhi (reminder)
+
+var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+var initializationSettingsIOS = IOSInitializationSettings(
+    onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+var initializationSettings = InitializationSettings(
+    initializationSettingsAndroid, initializationSettingsIOS);
+await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    onSelectNotification: selectNotification);
+
+IOSInitializationSettings class:
+//3 parameter leti hon sound ,alert aur badge ki permission k lia
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =  FlutterLocalNotificationsPlugin();
+var initializationSettingsAndroid =
+    AndroidInitializationSettings('app_icon');
+var initializationSettingsIOS = IOSInitializationSettings(
+        requestSoundPermission: false,
+        requestBadgePermission: false,
+        requestAlertPermission: false,  // filhal  error hai .run after create interface
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+    );
+var initializationSettings = InitializationSettings(
+    initializationSettingsAndroid, initializationSettingsIOS);
+await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+   onSelectNotification: onSelectNotification);
+
+
+Grouping Notification: 
+String groupKey = 'com.android.example.WORK_EMAIL';
+String groupChannelId = 'channel id';
+String groupChannelName = 'channel name';
+String groupChannelDescription = 'grouped channel description';
+
+AndroidNotificationDetails firstNotificationAndroidSpecifics =
+ AndroidNotificationDetails(
+     groupChannelId, groupChannelName, groupChannelDescription
+       importance: Importance.Max,
+     priority: Priority.High,
+     groupKey: groupKey);
+
+// multiple notification k lia...
+NotificationDetails firstNotificationPlatformSpecifics =
+    NotificationDetails(firstNotificationAndroidSpecifics, null);
+await flutterLocalNotificationsPlugin.show(1, 'text',
+    'text', firstNotificationPlatformSpecifics);
+AndroidNotificationDetails secondNotificationAndroidSpecifics =
+    AndroidNotificationDetails(
+        groupChannelId, groupChannelName, groupChannelDescription,
+        importance: Importance.Max,
+        priority: Priority.High,
+        groupKey: groupKey);
+NotificationDetails secondNotificationPlatformSpecifics =
+    NotificationDetails(secondNotificationAndroidSpecifics, null);
+await flutterLocalNotificationsPlugin.show(
+    2,
+    'Rehan Butt',
+    
+    secondNotificationPlatformSpecifics);
+
+// create the summary notification 
+List<String> lines = List<String>();
+
+
+// yahan interface banne k bad list add krni hai
+
+
+InboxStyleInformation inboxStyleInformation = InboxStyleInformation(
+    lines,
+    contentTitle: '5 new messages',
+    summaryText: 'Rehanbutt@gmail.com');
